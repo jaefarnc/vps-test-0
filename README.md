@@ -21,10 +21,13 @@ A few notes:
     b. Setting up unattended upgrades to ensure the latest security updates  
         - sudo -s    
         - apt install unattended-upgrades -y ( Installs unattended-upgrades)  
-        - dpkg-reconfigure --priority=low unattended-upgrades ( Prompts to enable automatic updates, select Yes )  
-        - nano /etc/apt/apt.conf.d/20auto-upgrades
+        - dpkg-reconfigure --priority=low unattended-upgrades ( Prompts to enable automatic updates, select Yes )
+        - nano /etc/apt/apt.conf.d/50unattended-upgrades ( configure unattended-upgrades. I'm not setting up anything else, I need the vm to be stable, no reboots or unknown errors )
+        - nano /etc/apt/apt.conf.d/20auto-upgrades ( setting apt to auto update and upgrade )
             -- APT::Periodic::Update-Package-Lists "1"; ( update packages )
             -- APT::Periodic::Download-Upgradeable-Packages "1"; ( upgrade updated packages )
             -- APT::Periodic::AutocleanInterval "7"; #( clean out cache with old package files every 7 days )
             -- APT::Periodic::Unattended-Upgrade "1"; #( automatically apply security upgrades )
+
+## Task 2: Enhanced SSH Security
             
