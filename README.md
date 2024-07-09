@@ -1,8 +1,15 @@
 # vps-test-0
-Setting up a Virtual Private Server using an VM configured on Azure
+Setting up a Virtual Private Server using a VM configured on Azure
+Some other things i did since i had time with the vm:
 
+    a. I routed a reverse shell through the webtunnel proxy using the tor expert bundle to ssh into the vps, so I can now access the the ai club server ( 64 gb cpu, 80 gb gpu ) on localhost port 4006, circumveting the CCC farewell
+    b. I routed 10 SSL systems through tor ( no proxies ) to ssh into the vps with a reverse shell, so I can now access the ssl systems on a number of local host ports from outside the network
+    c. Automated 100 Scrapers on 10 SSL machines with 100 concurrent tor connections with keepalives
+    d. Wrote headless scripts to scrape a number of websites over the vacations, including twitter
+    e. Wrote automation scripts for logging into NITC-Wifi, and for circumventing the open-ai api pricing by just automating my prompts on a playwright persistent context
+    f. spent most of my vacation toying with the AI Club systems via SSH
 A few notes:  
-
+    
     a. I completed all the tasks on paper, but I didn't go too deep with every single one, limited time due to both being on campus doing an internship as well as campus interview prep. 
     b. My documentation is concise on purpose, I found it a pain to clean it if i wrote everything.  
     c. I reversed a few of the configs even though they were initially correct, because I'm also using the VPS to setup a reverse shell to ssh into AIClub and SSL systems outside the network:  
@@ -10,7 +17,7 @@ A few notes:
         ii. fail2ban is disabled
         iii. ufw is turned off ( Im testing out ports for the ssl system reverse shells so i need many open )
         iv. I've set an inbound port rule on azure to allow any connection on all ports ( testing out ports for ssl reverse shells )
-        
+If you'd like me to setup the reversed configs, please let me know, it shouldn't be too difficult, just 4 commands.
 
 ## Task 1: Initial Setup
 
