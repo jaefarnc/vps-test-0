@@ -236,7 +236,26 @@ pre-configured with a user and key-pair when setting up the vm on azure
         - crontab -e
             --0 1 * * * /home/npu/backup_db.sh >/dev/null 2>&1
 
- 
+## Task 8: VPN Configuration
+
+### 1. VPN Setup:
+
+    ## This one was challenging. 
+    ## I initially ran through the entire process of installing wireguard on my vps and my machine, I found scripts online to configure nat and iptables on setup and setdown of the vpn and so on, but I felt I was wasting too much time.
+    ## Specifically, i could use the vps as a vpn but the traffic wasnt being routed. I messed with iptables, tried a few scripts, didnt have much success.
+    ## I found a youtube video which provided the entire setup with a script:
+    ## https://www.youtube.com/watch?v=9crHPBbsjtk
+    ## Followed it through and ran the command twice and voila, just had to load the two conf files into the wireguard client
+    a. Install and configure wireguard as a vpn server
+        - su jaefsha
+        - cd /home/jaefsha
+        - wget https://git.io/wireguard -O wireguard-install.sh && bash wireguard-install.sh
+    b. Create VPN credentials for at least two users
+        - # just run wireguard-install.sh twice
+    c. Ensure that the VPN allows access to the local network and the internet
+        - # script handles it. i look forward to running through the entire script manually once the internship rush is over
+    d. Share one credential to the admins for testing
+        - # awaiting
 
 
 
