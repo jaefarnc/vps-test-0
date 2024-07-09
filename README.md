@@ -4,8 +4,8 @@ Tasks done: 1-8
 
 A few notes:  
 
-    a.    My documentation is concise on purpose, I found it a pain to clean it if i wrote everything.  
-    b.    I reversed a few of the configs, because I'm also using the VPS to setup a reverse shell to ssh into AIClub and SSL systems outside the network:  
+    a. My documentation is concise on purpose, I found it a pain to clean it if i wrote everything.  
+    b. I reversed a few of the configs, because I'm also using the VPS to setup a reverse shell to ssh into AIClub and SSL systems outside the network:  
         i. Google Authenticator is turned off in sshd_config  
         ii.  
 
