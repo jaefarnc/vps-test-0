@@ -1,11 +1,11 @@
 # vps-test-0
 Setting up a Virtual Private Server using an VM configured on Azure
-Tasks done: 1-8
 
 A few notes:  
 
-    a. My documentation is concise on purpose, I found it a pain to clean it if i wrote everything.  
-    b. I reversed a few of the configs, because I'm also using the VPS to setup a reverse shell to ssh into AIClub and SSL systems outside the network:  
+    a. I completed all the tasks on paper, but I didn't go too deep with every single one, limited time due to both being on campus doing an internship as well as campus interview prep. 
+    b. My documentation is concise on purpose, I found it a pain to clean it if i wrote everything.  
+    c. I reversed a few of the configs, because I'm also using the VPS to setup a reverse shell to ssh into AIClub and SSL systems outside the network:  
         i. Google Authenticator is turned off in sshd_config  
         ii. fail2ban is disabled
 
