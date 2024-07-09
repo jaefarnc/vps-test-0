@@ -158,11 +158,91 @@ pre-configured with a user and key-pair when setting up the vm on azure
         - crontab -u examadmin -e
         - 0 2 * * * /home/examadmin/backup_exam_users.sh
 ## Task 6: Web Server Deployment and Secure Configuration
+### 1. Reverse Proxy Configuration
     a. setup nginx as a reverse proxy for applications running on the vm
-        - apt-get install nginx
-    b. 
+        - sudo -s && apt-get install nginx
+    b. ensure that the applications are not directly accessible from the internet. apps must run from a non-privileged user && c.Make sure the apps are only accessed through https via port 443 
+        - adduser npu
+        - su npu
+        - cd ~
+        ##### APP1
+        - wget https://do.edvinbasil.com/ssl/app -O app1
+        - wget https://do.edvinbasil.com/ssl/app.sha256.sig -O app1.sha256.sig
+        - use sha256sum on app1 and compare with the output of cat app11.sha256.sig to check if the hashes are equal
+        - chmod +x app1
+        - tmux
+            -- ./app1
+            -- # detach using ctrl b + ctrl d
+        ##### APP2
+        - git clone https://gitlab.com/tellmeY/issslopen.git
+        - cd issslopen
+        - # Install docker and docker-compose using the docs 
+        - usermod -aG docker npu
+        - nano Dockerfile
+            -- COPY edit.html /usr/src/app/edit.html ( add the line under the first #Copy public folder )
+            -- COPY --from=prerelease /usr/src/app/edit.html /usr/src/app/edit.html ( to copy edit.html as well, add the line under the second #Copy public folder )
+        - nano docker-compose.yaml
+            -- # Comment out the existing image directive
+            -- image: issslopen:v1.0.1
+        - docker build -t issslopen:v1.0.1 .
+        - docker-compose up -d
+        ##### NGINX configuration
+        - sudo -s
+        - nano /etc/nginx/sites-available/jaefsha.ssl.airno.de
+            -- listen 80;
+            -- server_name jaefsha.ssl.airno.de;
+            -- # use (include proxy_params;) under each location directive
+            -- location /server1/ 
+                ---proxy_pass http://127.0.0.1:8008/server1/;
+            -- location /server2/
+                ---proxy_pass http://127.0.0.1:8008/;
+            -- location /sslopen/
+                ---proxy_pass http://127.0.0.1:3000/sslopen/;
+        - # get an ssl certificate using certbot and force https
+        - ln -s /etc/nginx/sites-available/jaefsha.ssl.airno.de /etc/nginx/sites-enabled/
+        - cd /etc/nginx/sites-enabled/
+        - rm -r default
+        - systemctl restart nginx
 
-        
+### 2. Content Security Policy
+    a. Configure a robust CSP to prevent XSS attacks
+        - # Source : https://gist.github.com/plentz/6737338
+        - Just copied headers from this repo
+## Task 7: Database Security
+###1. Database Setup
+
+    a. Install MariaDB
+        - sudo -s
+        - apt install mariadb-server
+        - mysql -u root -p
+            -- CREATE DATABASE secure_onboarding; ( b. Create a db )
+            -- CREATE USER 'npu'@'localhost' IDENTIFIED BY 'npu'; ( create the user )
+            -- GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP ON secure_onboarding.* TO 'npu'@'localhost'; ( give minimal privileges )
+            -- FLUSH PRIVILEGES;
+            -- EXIT
+###2. Database Security
+
+    a. Remote root login disabled by default
+    b. Ensure accessibility only from localhost
+        - sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+            -- skip-networking
+        - sudo systemctl restart mariadb
+    c. Regular automated backups of the db
+        - cd /home/npu
+        - su npu
+        - nano ~/backup_db.sh
+            --mysqldump -u $MYSQL_USER -p$MYSQL_PASSWORD $DATABASE > $BACKUP_DIR/$DATABASE-$TIMESTAMP.sql
+        - chmod +x ~/backup_db.sh
+        - crontab -e
+            --0 1 * * * /home/npu/backup_db.sh >/dev/null 2>&1
+
+ 
+
+
+
+            
+
+
         
         
         
