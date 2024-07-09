@@ -110,5 +110,62 @@ pre-configured with a user and key-pair when setting up the vm on azure
         - systemctl enable suricata && systemctl start suricata
 ## Task 4: User and Permission Management
 
+### 1. User Setup
+    a. Create exam_1,exam_2,exam_3, examadmin, examaudit
+        - sudo -s
+        - adduser exam_i ( interpret i for the required users )
+    b. Give only access to home directories by default
+        - chmod 700 exam_i ( for all users )
+    c. Give examadmin root privileges
+        - usermod -aG sudo examadmin
+        - apt-get install acl ( use access control lists )
+        - setfacl -R -m u:examadmin:rwx exam_i ( apply to all existing contents, for user exam_i, inlcuding examaudit )
+        - setfacl -R -m d:u:examadmin:rwx exam_i ( apply to any new home dir contents for user exam_i, including examaudit)
+    d. Give examaudit read access on all folders
+        - setfacl -R -m u:examaudit:rx exam_i ( give read access, need x for cd, for user exam_i, including examadmin )
+        - setfacl -R -m d:u:examaudit:rx exam_i ( Apply to any new home dir contents for user exam_i, including examadmin)
+### 2. Home Directory Security
+    a. Ensure each user's home directory is only accessible by that user. 
+        - # Done in earlier subtask
+    b. Setup quotas to limit disk space each user can use:
+        - # Main Source: https://www.digitalocean.com/community/tutorials/how-to-set-filesystem-quotas-on-ubuntu-20-04
+        - # Source used to get the correct package to install: https://docs.cpanel.net/knowledge-base/general-systems-administration/how-to-fix-quotas/
+        - sudo -s
+        - apt install quota
+        - apt install linux-modules-extra-azure ( NOT linux-image-extra-virtual as mentioned in the article )
+        - nano /etc/fstab
+            -- replace defaults with usrquota,grpquota on the line pointing to the root filesystem
+        - mount -o remount /
+        - quotacheck -ugm /
+        - modprobe quota_v1 -S 6.5.0-1023-azure
+        - modprobe quota_v2 -S 6.5.0-1023-azure
+        - quotaon -v /
+        - setquota -u exam(i) 200M 220M 0 0 / ( set soft and hard limits on user disk space )
+
+### 3. Backup Script
+    a. Create  a script to back up the home directories of all exam_* users && c. Ensure only examadmin can run it
+        - su examadmin
+        - cd /home/examadmin
+        - nano backup_exam_users.sh
+            -- BACKUP_DIR="/home/examadmin/backups"
+            -- DATE=$(date +%Y%m%d)
+            -- LOG_FILE="$BACKUP_DIR/backup_$DATE.log"
+            -- mkdir -p $BACKUP_DIR
+            -- # checkuser function to check if $(whoami) == examadin
+            -- # backup_users function to backup users in a for loop
+        - chmod +x ./backup_exam_users.sh
+    b. Ensure the script runs daily and store backups compressed
+        - crontab -u examadmin -e
+        - 0 2 * * * /home/examadmin/backup_exam_users.sh
+## Task 6: Web Server Deployment and Secure Configuration
+    a. setup nginx as a reverse proxy for applications running on the vm
+        - apt-get install nginx
+    b. 
+
+        
+        
+        
+        
+    
         
             
