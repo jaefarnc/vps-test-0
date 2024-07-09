@@ -16,4 +16,6 @@ A few notes:
     b. Initially used 20.04. Bricked the vm when upgrading to 22.04 to automate wireguard setup. Redid the tasks on a new VM.
 
 ### 2. System Updates and Security
-    a.  
+    a. Update the system packages  
+        - Just used sudo apt update && sudo apt upgrade -y  
+    b. Setting up unattended upgrades to ensure the latest security updates  
